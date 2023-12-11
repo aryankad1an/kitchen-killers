@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    // its not reccomended to make everything public because,
+    // not just your editor but the other classes can access your variable which can be unsafe
     private void Update()
     {
+        
         Vector2 inputVector = new Vector2(0, 0);
         if (Input.GetKey(KeyCode.W))
         {
@@ -26,8 +29,8 @@ public class Player : MonoBehaviour
         }
 
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-        transform.position += moveDir; // transform refers to wherever the script is attached
-        
+        transform.position += moveDir * Time.deltaTime; // transform refers to wherever the script is attached
+        // this time thingy will keep this uniform in different FPS 
 
     }
 }
