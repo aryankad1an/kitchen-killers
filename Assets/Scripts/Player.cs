@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     // not just your editor but the other classes can access your variable which can be unsafe
     // using serialise field, this will be available to the unity editor
     [SerializeField] private float moveSpeed = 7f;
+    private bool isWalking;
     private void Update()
     {
         
@@ -31,6 +32,8 @@ public class Player : MonoBehaviour
         }
 
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+        isWalking = ( moveDir != new Vector3(0, 0, 0) ); // self explanatory
+        
         transform.position += moveDir * Time.deltaTime * moveSpeed; // transform refers to wherever the script is attached
         // this time thingy will keep this uniform in different FPS 
 
@@ -38,5 +41,10 @@ public class Player : MonoBehaviour
         // transform.forward = moveDir; // sets the forward vector to move direction
         float rotateSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime*rotateSpeed);  // this is to smooth-en the rotation
+    }
+
+    public bool IsWalking()
+    {
+        return isWalking;
     }
 }
