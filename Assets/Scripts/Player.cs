@@ -34,5 +34,9 @@ public class Player : MonoBehaviour
         transform.position += moveDir * Time.deltaTime * moveSpeed; // transform refers to wherever the script is attached
         // this time thingy will keep this uniform in different FPS 
 
+        // to add rotation with movement
+        // transform.forward = moveDir; // sets the forward vector to move direction
+        float rotateSpeed = 10f;
+        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime*rotateSpeed);  // this is to smooth-en the rotation
     }
 }
