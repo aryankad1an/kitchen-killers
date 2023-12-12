@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 {
     // its not reccomended to make everything public because,
     // not just your editor but the other classes can access your variable which can be unsafe
+    // using serialise field, this will be available to the unity editor
+    [SerializeField] private float moveSpeed = 7f;
     private void Update()
     {
         
@@ -29,7 +31,7 @@ public class Player : MonoBehaviour
         }
 
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-        transform.position += moveDir * Time.deltaTime; // transform refers to wherever the script is attached
+        transform.position += moveDir * Time.deltaTime * moveSpeed; // transform refers to wherever the script is attached
         // this time thingy will keep this uniform in different FPS 
 
     }
