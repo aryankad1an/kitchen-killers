@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    // for camera movement: use Cinemachine(really good plugin)
+    
     // its not reccomended to make everything public because,
     // not just your editor but the other classes can access your variable which can be unsafe
     // using serialise field, this will be available to the unity editor
