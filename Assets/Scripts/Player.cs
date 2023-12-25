@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
+
 public class Player : MonoBehaviour
 {
     // for camera movement: use Cinemachine(really good plugin)
@@ -14,11 +16,16 @@ public class Player : MonoBehaviour
     private bool isWalking;
     private void Update()
     {
+        HandleMovement();
+    }
+
+    private void HandleMovement()
+    {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
         
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
-        // adding collision detection
+        // adding collision detection(make sure to add box collider{with appropriate size} to the collision participants)
         float moveDistance = moveSpeed * Time.deltaTime;
         float playerRadius = .7f;
         float playerHeight = 2f;
