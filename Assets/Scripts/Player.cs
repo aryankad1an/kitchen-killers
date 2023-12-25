@@ -17,10 +17,20 @@ public class Player : MonoBehaviour
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
         
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-        isWalking = ( moveDir != new Vector3(0, 0, 0) ); // self explanatory
+
+        // adding collision detection
+        float playerSize = .7f;
+        bool canMove = !Physics.Raycast(transform.position, moveDir, playerSize); // returns a boolean(hits or not)
+        // raycast is something like a laser and it tells if it hits something or not
         
-        transform.position += moveDir * Time.deltaTime * moveSpeed; // transform refers to wherever the script is attached
-        // this time thingy will keep this uniform in different FPS 
+        isWalking = ( moveDir != new Vector3(0, 0, 0) ); // self explanatory
+
+        if (canMove)
+        {
+            transform.position += moveDir * Time.deltaTime * moveSpeed; // transform refers to wherever the script is attached
+            // this time thingy will keep this uniform in different FPS 
+
+        }
 
         // to add rotation with movement
         // transform.forward = moveDir; // sets the forward vector to move direction
