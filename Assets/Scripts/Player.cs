@@ -17,6 +17,23 @@ public class Player : MonoBehaviour
     private void Update()
     {
         HandleMovement();
+        HandleInteractions();
+    }
+
+    private void HandleInteractions()
+    {
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        
+        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+
+        float interactDistance = 2f;
+
+        bool didHit = Physics.Raycast(transform.position, moveDir, out RaycastHit raycastHit, interactDistance);
+        // the raycastHit is an output parameter that helps in getting the value of the struct of things that is hit
+        if (didHit)
+        {
+            Debug.Log(raycastHit);
+        }
     }
 
     private void HandleMovement()
