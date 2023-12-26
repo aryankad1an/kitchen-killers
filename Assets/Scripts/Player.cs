@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     // using serialise field, this will be available to the unity editor
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private LayerMask layerMask;
     private bool isWalking;
     private Vector3 lastInteractDir;
     private void Update()
@@ -33,8 +34,9 @@ public class Player : MonoBehaviour
         }
         float interactDistance = 2f;
 
-        bool didHit = Physics.Raycast(transform.position, lastInteractDir, out RaycastHit raycastHit, interactDistance); // with lastInteractDir, even if we stop moving it still works
+        bool didHit = Physics.Raycast(transform.position, lastInteractDir, out RaycastHit raycastHit, interactDistance, layerMask); // with lastInteractDir, even if we stop moving it still works
         // the raycastHit is an output parameter that helps in getting the value of the struct of things that is hit
+        // with layerMask it will only raycast towards the specified gameObject Layer, thus all the unnecessary obstactles(like invisible wall) will be ignored
         if (didHit)
         {
             // out means output parameters
