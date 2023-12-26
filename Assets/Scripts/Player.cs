@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private GameInput gameInput;
     private bool isWalking;
+    private Vector3 lastInteractDir;
     private void Update()
     {
         HandleMovement();
@@ -26,13 +27,22 @@ public class Player : MonoBehaviour
         
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
+        if (moveDir != Vector3.zero)
+        {
+            lastInteractDir = moveDir;
+        }
         float interactDistance = 2f;
 
-        bool didHit = Physics.Raycast(transform.position, moveDir, out RaycastHit raycastHit, interactDistance);
+        bool didHit = Physics.Raycast(transform.position, lastInteractDir, out RaycastHit raycastHit, interactDistance); // with lastInteractDir, even if we stop moving it still works
         // the raycastHit is an output parameter that helps in getting the value of the struct of things that is hit
         if (didHit)
         {
-            Debug.Log(raycastHit);
+            // out means output parameters
+            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
+            {
+                // has ClearCounter
+                clearCounter.Interact();
+            }
         }
     }
 
