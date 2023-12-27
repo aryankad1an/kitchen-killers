@@ -7,6 +7,15 @@ using UnityEngine.XR;
 public class Player : MonoBehaviour
 {
     // for camera movement: use Cinemachine(really good plugin)
+
+    public static Player Instance { get; private set; } // auto code lmao(C# feature) {its like an instance variable with getter and setter}
+    public event EventHandler <OnSelectedCounterChangedEventArgs>OnSelectedCounterChanged; // event handler in C#
+
+    // this is a way of assigning arguments to an event handler
+    public class OnSelectedCounterChangedEventArgs : EventArgs // note that it extends EventArgs class
+    {
+        public ClearCounter selectedCounter;
+    }
     
     // its not reccomended to make everything public because,
     // not just your editor but the other classes can access your variable which can be unsafe
@@ -14,8 +23,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask layerMask;
+    
     private bool isWalking;
     private Vector3 lastInteractDir;
+    private ClearCounter selectedCounter;
     private void Update()
     {
         HandleMovement();
@@ -43,15 +54,32 @@ public class Player : MonoBehaviour
             if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
             {
                 // has ClearCounter
-                
+                if (clearCounter != selectedCounter)
+                {
+                    selectedCounter = clearCounter;
+                    SetSelectedCounter(selectedCounter);
+                    
+                }
                 // interact button
                 // a simple event listener and handler
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    clearCounter.Interact();
+                    selectedCounter.Interact();
                 }
                 
             }
+            else
+            {
+                selectedCounter = null;
+                SetSelectedCounter(selectedCounter);
+
+            }
+        }
+        else
+        {
+            selectedCounter = null;
+            SetSelectedCounter(selectedCounter);
+
         }
     }
 
@@ -120,8 +148,29 @@ public class Player : MonoBehaviour
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime*rotateSpeed);  // this is to smooth-en the rotation
     }
 
+    private void SetSelectedCounter(ClearCounter selectedCounterPara)
+    {
+        // event invoked
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs
+        {
+            // adding event parameters
+            selectedCounter = selectedCounterPara
+        });
+    }
+
     public bool IsWalking()
     {
         return isWalking;
     }
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.LogError("There is more than one player instance");
+        }
+        // awake is called when a particular script instance is loaded
+        Instance = this;
+    }
 }
+
